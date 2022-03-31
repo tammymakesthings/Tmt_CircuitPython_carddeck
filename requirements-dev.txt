@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+# SPDX-License-Identifier: MIT
+
+black
+coverage
+ipython
+isort
+pre-commit
+pylint
+pytest
+pytest-cov
+pytest-mock

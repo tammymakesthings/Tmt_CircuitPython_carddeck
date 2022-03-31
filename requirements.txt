@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+# SPDX-License-Identifier: MIT
+
+adafruit-circuitpython-bitmap-font
+adafruit-circuitpython-display-shapes
+adafruit-circuitpython-display-text
+adafruit-circuitpython-displayio-layout
+adafruit-circuitpython-imageload
+blinka-displayio-pygamedisplay
