@@ -54,6 +54,62 @@ class TestCard:
         assert int(Card("A", "S")) == 59
         assert int(Card("*")) == 75
 
+    def test_card_equality(self):
+        card_one = Card(3, "C")
+        card_two = Card(3, "C")
+        card_three = Card(3, "S")
+        card_four = Card(7, "C")
+        assert card_one == card_two
+        assert card_one != card_three
+        assert card_one != card_four
+        assert Card("*") == Card("*")
+
+    def test_card_greater_than(self):
+        assert Card('A', 'S') > Card(2, 'S')
+        assert Card('A', 'S') > Card('A', 'D')
+        assert Card('*') > Card('A', 'S')
+
+    def test_card_less_than(self):
+        assert Card(2, 'S') < Card(3, 'S')
+        assert Card('A', 'D') < Card('A', 'S')
+
+    def test_dunder_str(self):
+        assert str(Card('A', 'D')) == 'AD'
+        assert str(Card(5, 'S')) == '5S'
+        assert str(Card('*')) == '*'
+
+    def test_dunder_repr(self):
+        assert repr(Card('A', 'D')) == 'AD'
+        assert repr(Card(5, 'S')) == '5S'
+        assert repr(Card('*')) == '*'
+
+    def test_can_sign_text(self):
+        the_card = Card('A', 'S')
+        the_card.sign(text_signature='Tammy')
+        the_signature = the_card.signature
+        assert the_signature.type == 'text'
+        assert the_signature.data == 'Tammy'
+
+    def test_can_sign_graphic(self):
+        the_card = Card('A', 'S')
+        the_card.sign(graphic_signature='Tammy')
+        the_signature = the_card.signature
+        assert the_signature.type == 'graphic'
+        assert the_signature.data == 'Tammy'
+
+    def test_have_exactly_one_signature_type(self):
+        the_card = Card('A', 'S')
+        with pytest.raises(AttributeError):
+            the_card.sign()
+        with pytest.raises(AttributeError):
+            the_card.sign(text_signature='Tammy', graphic_signature='Tammy')
+
+    def test_cant_sign_more_than_once(self):
+        the_card = Card('A', 'S')
+        the_card.sign(text_signature='Tammy')
+        with pytest.raises(AttributeError):
+            the_card.sign(text_signature='Also Tammy')
+
     def test_can_override_rank_order(self):
         pass
 
