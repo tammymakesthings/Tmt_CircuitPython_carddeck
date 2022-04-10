@@ -17,13 +17,9 @@ class TestCard:
     """Unit tests for the Card class"""
 
     def test_can_initialize(self):
-        the_card = Card(rank="queen", suit="hearts")
+        the_card = Card(rank="Q", suit="H")
         assert the_card.rank == "Q"
         assert the_card.suit == "H"
-
-    def test_initialize_with_no_values(self):
-        with pytest.raises(AttributeError):
-            _ = Card(rank=None, suit=None)
 
     def test_can_create_joker(self):
         the_card = Card(rank="*")
@@ -31,10 +27,10 @@ class TestCard:
         assert the_card.suit == "*"
 
     def test_can_get_rank_order(self):
-        assert Card(rank=7, suit="D").rank_value() == 7
-        assert Card(rank="J", suit="D").rank_value() == 11
-        assert Card(rank="A", suit="D").rank_value() == 14
-        assert Card(rank="*").rank_value() == 15
+        assert Card(rank="7", suit="D").rank_value() == 5
+        assert Card(rank="J", suit="D").rank_value() == 9
+        assert Card(rank="A", suit="D").rank_value() == 12
+        assert Card(rank="*").rank_value() == 13
 
     def test_can_get_suit_order(self):
         assert Card(rank="7", suit="C").suit_value() == 0
@@ -44,15 +40,15 @@ class TestCard:
         assert Card(rank="*").suit_value() == 4
 
     def test_can_get_int_value(self):
-        assert int(Card(2, "C")) == 2
-        assert int(Card("A", "C")) == 14
-        assert int(Card(2, "D")) == 17
-        assert int(Card("A", "D")) == 29
-        assert int(Card(2, "H")) == 32
-        assert int(Card("A", "H")) == 44
-        assert int(Card(2, "S")) == 47
-        assert int(Card("A", "S")) == 59
-        assert int(Card("*")) == 75
+        assert int(Card(2, "C")) == 1
+        assert int(Card("A", "C")) == 13
+        assert int(Card(2, "D")) == 14
+        assert int(Card("A", "D")) == 26
+        assert int(Card(2, "H")) == 27
+        assert int(Card("A", "H")) == 39
+        assert int(Card(2, "S")) == 40
+        assert int(Card("A", "S")) == 52
+        assert int(Card("*")) == 53
 
     def test_card_equality(self):
         card_one = Card(3, "C")
@@ -97,7 +93,7 @@ class TestCard:
         assert the_signature.type == 'graphic'
         assert the_signature.data == 'Tammy'
 
-    def test_have_exactly_one_signature_type(self):
+    def test_have_only_one_signature_type(self):
         the_card = Card('A', 'S')
         with pytest.raises(AttributeError):
             the_card.sign()

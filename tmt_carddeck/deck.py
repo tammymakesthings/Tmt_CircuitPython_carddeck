@@ -7,13 +7,15 @@ tmt_carddeck: CircuitPython Card Deck library.
 """
 
 from tmt_carddeck.card import Card  # noqa
-
+from tmt_carddeck.constants import (
+    DEFAULT_SUIT_ORDER,
+    DEFAULT_RANK_ORDER,
+)
 
 try:
-    from typing import List, Optional  # noqa
+    from typing import List, Optional, Iterable  # noqa
 except ImportError:
     pass
-
 
 class DeckEmpty(RuntimeWarning):
     """Raised when the deck is empty and reset_if_empty is false.
@@ -32,8 +34,8 @@ class Deck:
         Args:
             initial_cards (Optional[list[Card]]): The initial list of cards.
         """
-        self._initial_cards = list(initial_cards)
-        self._cards = []
+        self._initial_cards: Optional[List[Card]] = list(initial_cards) if initial_cards else []
+        self._cards: Optional[List[Card]] = []
         self.reset_deck()
 
     def reset_deck(self) -> None:
@@ -42,7 +44,7 @@ class Deck:
         Returns:
 
         """
-        self._cards = list(self._initial_cards)
+        self._cards = list(self._initial_cards)  # type: ignore
 
     @property
     def cards(self) -> Optional[List[Card]]:
@@ -53,7 +55,7 @@ class Deck:
         Returns:
         A reference to the deck's current contents.
         """
-        return self._cards
+        return self._cards if self._cards else None
 
     def pick(self, **kwargs):
         """
@@ -85,4 +87,28 @@ class Deck:
         """
         Get the number of cards in the deck.
         """
-        return len(self._cards)
+        return len(list(self._cards)) if self._cards else 0
+
+    def __getitem__(self, item):
+        return self._cards[item]
+
+    def __setitem__(self, key, value):
+        self._cards[key] = value
+
+
+def standard_deck(include_blank: Optional[bool] = True,
+                  include_joker: Optional[bool] = True) -> Deck:
+
+    the_deck: List[Card] = []
+
+    if include_blank:
+        the_deck.append(Card(None, None))
+
+    for suit in DEFAULT_SUIT_ORDER:
+        for rank in DEFAULT_RANK_ORDER:
+            the_deck.append(Card(rank, suit))
+
+    if include_joker:
+        the_deck.append(Card('*', '*'))
+
+    return Deck(initial_cards=the_deck)

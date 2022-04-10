@@ -8,33 +8,24 @@ tmt_carddeck: CircuitPython Card Deck library.
 
 from collections import namedtuple
 try:
-    from typing import List, Optional, Union, Tuple        # noqa
+    from typing import List, Optional, Union, Tuple, Set        # noqa
 except ImportError:
     pass
+
+from tmt_carddeck.constants import (
+    DEFAULT_RANK_ORDER,
+    DEFAULT_SUIT_ORDER
+)
+
+CardSignatureType = namedtuple('CardSignatureType', 'type data')
+
 
 class Card:
     """
     Class to represent a playing card.
     """
 
-    DEFAULT_RANK_ORDER: List[str] = [
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K",
-        "A",
-        "*",
-    ]
 
-    DEFAULT_SUIT_ORDER: List[str] = ["C", "D", "H", "S", "*"]
 
     def __init__(
         self,
@@ -63,63 +54,93 @@ class Card:
                 - The rank and suit are both None
         """
 
-        # REFACTOR: Check that rank and suit exist in the rank order and suit
-        # order arrays.
+        self._value_order: List[str] = []
+        self._rank_order = list(kwargs.get("rank_order",
+                                           DEFAULT_RANK_ORDER))
+        self._suit_order = list(kwargs.get("suit_order",
+                                           DEFAULT_SUIT_ORDER))
 
-        self._rank_order = list(kwargs.get("rank_order", Card.DEFAULT_RANK_ORDER))
-        self._suit_order = list(kwargs.get("suit_order", Card.DEFAULT_SUIT_ORDER))
-        self._signature = None
-
-        if rank is None and suit is None:
-            raise AttributeError("blank cards are not allowed")
+        self._build_value_order_list()
+        self._signature: Optional[CardSignatureType] = None
+        self._rank: Optional[str] = None
+        self._suit: Optional[str] = None
 
         if rank == "*" or suit == "*":
             self._rank = "*"
             self._suit = "*"
         else:
+            if rank and str(rank) not in self._rank_order and rank != '*':
+                raise ValueError('rank not in rank_order list')
+            if suit and str(suit) not in self._suit_order and suit != '*':
+                raise ValueError('suit not in suit_order list')
+
             if isinstance(rank, int):
                 self._rank = str(rank)
             else:
-                self._rank = str(rank).strip().upper()[0]
+                self._rank = str(rank).strip().upper()
 
-            self._suit = str(suit).strip().upper()[0]
+            self._suit = str(suit).strip().upper()
+
+    def _build_value_order_list(self):
+        """Update the value order list from the rank order and suit order.
+        """
+        self._value_order = ['']
+
+        for suit_iterator in self._suit_order:
+            if suit_iterator != '*':
+                for rank_iterator in self._rank_order:
+                    card_name: str = ""  # noqa
+
+                    if rank_iterator == '*' or suit_iterator == '*':
+                        card_name = "*"
+                    else:
+                        card_name = f"{rank_iterator}{suit_iterator}"
+                    if card_name not in self._value_order:
+                        self._value_order.append(card_name)
+
+        if "*" not in self._value_order:
+            self._value_order.append("*")
 
     @property
-    def rank(self) -> str:
+    def rank(self) -> Optional[str]:
         """Retrieves the card's rank."""
         return self._rank
 
     @property
-    def suit(self) -> str:
+    def suit(self) -> Optional[str]:
         """Retrieves the card's suit."""
         return self._suit
 
-    def rank_value(self) -> int:
-        """Retrieves the numeric rank value of the card.
+    @property
+    def rank_order(self):
+        return list(self._rank_order)
 
-        Note that rank values of 0 and 1 are undefined by default so that the
-        integer value of a card's rank matches the number on the card.
-        """
-        # REFACTOR Don't make assumptions about the length/offset of rank
-        # order
-        return self._rank_order.index(self.rank) + 2
+    @property
+    def suit_order(self):
+        return list(self._suit_order)
+
+    @property
+    def value_order(self):
+        return list(self._value_order)
+
+    def rank_value(self) -> int:
+        """Retrieves the numeric rank value of the card."""
+        if self.rank == '*':
+            return len(self._rank_order)
+        return self._rank_order.index(self.rank)
 
     def suit_value(self) -> int:
         """Retrieves the numeric suit value of the card."""
+        if self.suit == '*':
+            return len(self._suit_order)
         return self._suit_order.index(self.suit)
 
     def __int__(self) -> int:
         """Retrieves the numeric value of the card.
-
-        Note that this is deliberately not designed to be the index of the card
-        within the deck. Rather, it's designed to just produce a unique number
-        such that cards can be compared to one another.
         """
-
-        # REFACTOR: We shouldn't make assumptions about the number of suits
-        # and the number of ranks.
-
-        return (self.suit_value() * 15) + self.rank_value()
+        if self.__str__() in self._value_order:
+            return self._value_order.index(self.__str__())
+        raise AttributeError('card value is unknown')
 
     def __eq__(self, other) -> bool:
         return self.suit == other.suit and self.rank == other.rank
@@ -142,8 +163,6 @@ class Card:
              text_signature: Optional[str] = None,
              graphic_signature: Optional[str] = None) -> None:
 
-        SignatureType = namedtuple('Signature', 'type data')
-
         # Check that we have one kind of signature but not both
         if not text_signature and not graphic_signature:
             raise AttributeError('card must have a text or graphic signature')
@@ -153,12 +172,12 @@ class Card:
             raise AttributeError('card is already signed')
 
         if text_signature:
-            self._signature = SignatureType(type='text', data=text_signature)
+            self._signature = CardSignatureType(type='text', data=text_signature)
         elif graphic_signature:
-            self._signature = SignatureType(type='graphic', data=graphic_signature)
+            self._signature = CardSignatureType(type='graphic', data=graphic_signature)
 
     @property
-    def signature(self) -> Optional[Tuple]:
+    def signature(self) -> Optional[CardSignatureType]:
         return self._signature
 
     # TODO

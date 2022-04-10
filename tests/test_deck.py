@@ -5,18 +5,25 @@
 """
 CircuitPython  Card Deck Library
 """
+# Disable Pylint "method could be a function" errors
+#
+# pylint:disable=R0201, invalid-name
 
 import pytest  # noqa
 
 from tmt_carddeck.card import Card  # pytest:disable=unused-import
-from tmt_carddeck.deck import (Deck, DeckEmpty)  # noqa pylint:disable=unused-import
+from tmt_carddeck.deck import (
+    Deck,
+    DeckEmpty,
+    standard_deck,
+)  #noqa pylint:disable=unused-import
+from tmt_carddeck.constants import (
+    DEFAULT_RANK_ORDER,
+    DEFAULT_SUIT_ORDER,
+)
 
 
 class TestDeck:
-    # Disable Pylint "method could be a function" errors
-    #
-    # pylint:disable=R0201, invalid-name
-
     """Unit tests for the Deck class.
     """
 
@@ -81,3 +88,47 @@ class TestDeck:
         for _ in range(len(starter_deck)):
             starter_deck.pick()
         assert len(starter_deck) == 0
+
+    def test_can_get_std_deck(self) -> None:
+        """
+
+        Returns:
+
+        """
+        the_deck = standard_deck()
+        assert isinstance(the_deck, Deck)
+        assert len(the_deck) == 54
+
+        for suit in DEFAULT_SUIT_ORDER:
+            for rank in DEFAULT_RANK_ORDER:
+                assert Card(rank=rank, suit=suit) in the_deck
+        assert Card(None, None) in the_deck
+        assert Card('*', '*') in the_deck
+
+    def test_std_deck_optional_args(self) -> None:
+        """
+
+        Returns:
+
+        """
+
+        joker_card = Card("*", "*")
+        blank_card = Card(None, None)
+
+        deck_without_joker = standard_deck(include_joker=False)
+        deck_without_blank = standard_deck(include_blank=False)
+        only_playable_cards = standard_deck(include_blank=False,
+                                            include_joker=False)
+
+        assert isinstance(deck_without_blank, Deck)
+        assert len(deck_without_blank) == 53
+        assert blank_card not in deck_without_blank
+
+        assert isinstance(deck_without_joker, Deck)
+        assert len(deck_without_joker) == 53
+        assert joker_card not in deck_without_joker
+
+        assert isinstance(only_playable_cards, Deck)
+        assert len(only_playable_cards) == 52
+        assert blank_card not in only_playable_cards
+        assert joker_card not in only_playable_cards
