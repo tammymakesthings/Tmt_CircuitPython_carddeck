@@ -15,7 +15,7 @@ from tmt_carddeck.deck import (Deck, DeckEmpty)  # noqa pylint:disable=unused-im
 class TestDeck:
     # Disable Pylint "method could be a function" errors
     #
-    # pylint:disable=R0201
+    # pylint:disable=R0201, invalid-name
 
     """Unit tests for the Deck class.
     """
