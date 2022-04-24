@@ -1,4 +1,8 @@
-# SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#  #
+#  SPDX-License-Identifier: MIT
+#
+#
 #
 # SPDX-License-Identifier: MIT
 
@@ -7,17 +11,17 @@ tmt_carddeck: CircuitPython Card Deck library.
 """
 
 from collections import namedtuple
+
+
 try:
     from typing import List, Optional, Union, Sequence  # noqa
 except ImportError:
     pass
 
-from tmt_carddeck.constants import (
-    DEFAULT_RANK_ORDER,
-    DEFAULT_SUIT_ORDER
-)
+from tmt_carddeck.constants import DEFAULT_RANK_ORDER, DEFAULT_SUIT_ORDER
 
-CardSignatureType = namedtuple('CardSignatureType', 'type data')
+
+CardSignatureType = namedtuple("CardSignatureType", "type data")
 
 
 class Card:
@@ -25,10 +29,12 @@ class Card:
     Class to represent a playing card.
     """
 
-    def __init__(self,
-                 rank: Optional[Union[int, str, None]] = None,
-                 suit: Optional[str] = None,
-                 **kwargs) -> None:
+    def __init__(
+            self,
+            rank: Optional[Union[int, str, None]] = None,
+            suit: Optional[str] = None,
+            **kwargs
+    ) -> None:
         """
         Create a new Card.
 
@@ -67,9 +73,9 @@ class Card:
             self._is_joker = True
         else:
             if rank and str(rank) not in self._rank_order and self.is_joker is False:
-                raise ValueError('rank not in rank_order list')
+                raise ValueError("rank not in rank_order list")
             if suit and str(suit) not in self._suit_order and self.is_joker is False:
-                raise ValueError('suit not in suit_order list')
+                raise ValueError("suit not in suit_order list")
 
             if isinstance(rank, int):
                 self._rank = str(rank)
@@ -80,16 +86,15 @@ class Card:
                 self._suit = str(suit).strip().upper()
 
     def _build_value_order_list(self) -> None:
-        """Update the value order list from the rank order and suit order.
-        """
-        self._value_order = ['']
+        """Update the value order list from the rank order and suit order."""
+        self._value_order = [""]
 
         for suit_iterator in self._suit_order:
-            if suit_iterator != '*':
+            if suit_iterator != "*":
                 for rank_iterator in self._rank_order:
                     card_name: str = ""  # noqa
 
-                    if rank_iterator == '*' or suit_iterator == '*':
+                    if rank_iterator == "*" or suit_iterator == "*":
                         card_name = "*"
                     else:
                         card_name = f"{rank_iterator}{suit_iterator}"
@@ -139,7 +144,9 @@ class Card:
     def rank_value(self) -> int:
         """Retrieves the numeric rank value of the card."""
         if self.is_joker:
-            if (self.rank is None or self.rank == '*') and (self.suit is None or self.suit == '*'):
+            if (self.rank is None or self.rank == "*") and (
+                    self.suit is None or self.suit == "*"
+            ):
                 return len(self._rank_order)
             return self._int_value_from_string(str(self.rank))
         return self._rank_order.index(self.rank)
@@ -148,7 +155,9 @@ class Card:
     def suit_value(self) -> int:
         """Retrieves the numeric suit value of the card."""
         if self.is_joker:
-            if (self.rank is None or self.rank == '*') and (self.suit is None or self.suit == '*'):
+            if (self.rank is None or self.rank == "*") and (
+                    self.suit is None or self.suit == "*"
+            ):
                 return len(self._suit_order)
             return self._int_value_from_string(str(self.suit))
         return self._suit_order.index(self.suit)
@@ -158,15 +167,14 @@ class Card:
         if self.is_joker:
             if str(self) in self._value_order:
                 return self._value_order.index(str(self))
-            if str(self) == '*':
+            if str(self) == "*":
                 return len(self._value_order) - 1
             return self._int_value_from_string(str(self))
 
         if str(self) in self._value_order:
             return self._value_order.index(str(self))
 
-        raise AttributeError('card value is unknown')
-
+        raise AttributeError("card value is unknown")
 
     def __eq__(self, other) -> bool:
         """Compares two cards (==)"""
@@ -183,10 +191,10 @@ class Card:
     def __str__(self) -> str:
         """Returns the string value of a card."""
         if self.is_joker:
-            joker_str = '*'
-            if self.rank is not None and self.rank != '*':
+            joker_str = "*"
+            if self.rank is not None and self.rank != "*":
                 joker_str = joker_str + str(self.rank)
-            if self.suit is not None and self.suit != '*':
+            if self.suit is not None and self.suit != "*":
                 joker_str = joker_str + str(self.suit)
             return joker_str
         return f"{self.rank}{self.suit}"
@@ -213,22 +221,24 @@ class Card:
             int_val += ord(val_char)
         return int_val
 
-    def sign(self,
-             text_signature: Optional[str] = None,
-             graphic_signature: Optional[str] = None) -> None:
+    def sign(
+            self,
+            text_signature: Optional[str] = None,
+            graphic_signature: Optional[str] = None,
+    ) -> None:
         """Allows a signature to be added to a card."""
         # Check that we have one kind of signature but not both
         if not text_signature and not graphic_signature:
-            raise AttributeError('card must have a text or graphic signature')
+            raise AttributeError("card must have a text or graphic signature")
         if text_signature and graphic_signature:
-            raise AttributeError('card cannot have both text and graphic signatures')
+            raise AttributeError("card cannot have both text and graphic signatures")
         if self._signature is not None:
-            raise AttributeError('card is already signed')
+            raise AttributeError("card is already signed")
 
         if text_signature:
-            self._signature = CardSignatureType(type='text', data=text_signature)
+            self._signature = CardSignatureType(type="text", data=text_signature)
         elif graphic_signature:
-            self._signature = CardSignatureType(type='graphic', data=graphic_signature)
+            self._signature = CardSignatureType(type="graphic", data=graphic_signature)
 
     @property
     def signature(self) -> Optional[CardSignatureType]:

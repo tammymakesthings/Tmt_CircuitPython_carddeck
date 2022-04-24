@@ -1,3 +1,10 @@
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#  #
+#  SPDX-License-Identifier: MIT
+#
+#
+#
+
 # SPDX-FileCopyrightText: 2022 Tammy Cravit <tammy@tammymakesthings.com>
 #
 # SPDX-License-Identifier: MIT
@@ -12,20 +19,19 @@ CircuitPython  Card Deck Library
 import pytest  # noqa
 
 from tmt_carddeck.card import Card  # pytest:disable=unused-import
-from tmt_carddeck.deck import (
-    Deck,
-    DeckEmpty,
-    standard_deck,
-)  #noqa pylint:disable=unused-import
 from tmt_carddeck.constants import (
     DEFAULT_RANK_ORDER,
     DEFAULT_SUIT_ORDER,
 )
+from tmt_carddeck.deck import (
+    Deck,
+    DeckEmpty,
+    standard_deck,
+)  # noqa pylint:disable=unused-import
 
 
 class TestDeck:
-    """Unit tests for the Deck class.
-    """
+    """Unit tests for the Deck class."""
 
     def test_can_initialize_deck(self, starter_deck) -> None:
         """
@@ -103,7 +109,7 @@ class TestDeck:
             for rank in DEFAULT_RANK_ORDER:
                 assert Card(rank=rank, suit=suit) in the_deck
         assert Card(None, None) in the_deck
-        assert Card('*', '*') in the_deck
+        assert Card("*", "*") in the_deck
 
     def test_std_deck_optional_args(self) -> None:
         """
@@ -117,8 +123,7 @@ class TestDeck:
 
         deck_without_joker = standard_deck(include_joker=False)
         deck_without_blank = standard_deck(include_blank=False)
-        only_playable_cards = standard_deck(include_blank=False,
-                                            include_joker=False)
+        only_playable_cards = standard_deck(include_blank=False, include_joker=False)
 
         assert isinstance(deck_without_blank, Deck)
         assert len(deck_without_blank) == 53
