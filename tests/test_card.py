@@ -8,7 +8,9 @@
 
 
 import pytest  # pylint:disable=unused-import
+
 from tmt_carddeck.card import Card
+
 
 # pylint:disable=no-self-use,missing-function-docstring
 
@@ -24,20 +26,38 @@ class TestCard:
     def test_can_create_joker(self):
         the_card = Card(rank="*")
         assert the_card.rank == "*"
-        assert the_card.suit == "*"
+        assert the_card.suit is None
+        assert the_card.is_joker
+
+    def test_can_create_multiple_jokers(self):
+        joker_one = Card(rank='*', suit='R')
+        joker_two = Card(rank='*', suit='B')
+        joker_three = Card(rank='P', suit='P', is_joker=True)
+
+        assert joker_one.is_joker
+        assert joker_two.is_joker
+        assert joker_three.is_joker
+        assert joker_one != joker_two
+        assert joker_three != joker_two
+        assert joker_three != joker_one
+
+    def test_multi_joker_int_val(self):
+        joker_one = Card(rank='*', suit='R')
+        joker_two = Card(rank='*', suit='B')
+        assert int(joker_one) != int(joker_two)
 
     def test_can_get_rank_order(self):
-        assert Card(rank="7", suit="D").rank_value() == 5
-        assert Card(rank="J", suit="D").rank_value() == 9
-        assert Card(rank="A", suit="D").rank_value() == 12
-        assert Card(rank="*").rank_value() == 13
+        assert Card(rank="7", suit="D").rank_value == 5
+        assert Card(rank="J", suit="D").rank_value == 9
+        assert Card(rank="A", suit="D").rank_value == 12
+        assert Card(rank="*").rank_value == 13
 
     def test_can_get_suit_order(self):
-        assert Card(rank="7", suit="C").suit_value() == 0
-        assert Card(rank="7", suit="D").suit_value() == 1
-        assert Card(rank="7", suit="H").suit_value() == 2
-        assert Card(rank="7", suit="S").suit_value() == 3
-        assert Card(rank="*").suit_value() == 4
+        assert Card(rank="7", suit="C").suit_value == 0
+        assert Card(rank="7", suit="D").suit_value == 1
+        assert Card(rank="7", suit="H").suit_value == 2
+        assert Card(rank="7", suit="S").suit_value == 3
+        assert Card(rank="*").suit_value == 4
 
     def test_can_get_int_value(self):
         assert int(Card(2, "C")) == 1
@@ -49,6 +69,7 @@ class TestCard:
         assert int(Card(2, "S")) == 40
         assert int(Card("A", "S")) == 52
         assert int(Card("*")) == 53
+        assert int(Card(rank=2, suit='F', is_joker=True)) == 162
 
     def test_card_equality(self):
         card_one = Card(3, "C")
@@ -73,11 +94,22 @@ class TestCard:
         assert str(Card('A', 'D')) == 'AD'
         assert str(Card(5, 'S')) == '5S'
         assert str(Card('*')) == '*'
+        assert str(Card('*', 'R')) == '*R'
+        assert str(Card(2, '*')) == '*2'
+        assert str(Card(rank='5', suit='P', is_joker='*')) == '*5P'
 
     def test_dunder_repr(self):
         assert repr(Card('A', 'D')) == 'AD'
         assert repr(Card(5, 'S')) == '5S'
         assert repr(Card('*')) == '*'
+
+    def test_dunder_hash(self):
+        assert hash(Card('A', 'D')) == 69697
+        assert hash(Card(5, 'S')) == 85045
+        assert hash(Card('*')) == 42
+        assert hash(Card(rank='*', suit='R')) == 84010
+        assert hash(Card(rank=3, suit='*')) == 43059
+        assert hash(Card(rank=10, suit='F', is_joker=True)) == 71777
 
     def test_can_sign_text(self):
         the_card = Card('A', 'S')
@@ -93,7 +125,7 @@ class TestCard:
         assert the_signature.type == 'graphic'
         assert the_signature.data == 'Tammy'
 
-    def test_have_only_one_signature_type(self):
+    def test_cant_multisign_card(self):
         the_card = Card('A', 'S')
         with pytest.raises(AttributeError):
             the_card.sign()
