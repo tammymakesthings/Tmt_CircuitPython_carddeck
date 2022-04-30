@@ -1,21 +1,14 @@
-#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
-#  #
-#  SPDX-License-Identifier: MIT
-#
-#
-#
-#
-#
-#
-# SPDX-License-Identifier: MIT
-
-
 """CircuitPython Card Deck Library
 """
+
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+#  SPDX-License-Identifier: MIT
 
 import pytest  # pylint:disable=unused-import
 
 from tmt_carddeck.card import Card
+from tmt_carddeck.constants import FACE_DOWN, FACE_UP, ROTATION_0, ROTATION_180
 
 
 # pylint:disable=no-self-use,missing-function-docstring
@@ -131,7 +124,7 @@ class TestCard:
         assert the_signature.type == "graphic"
         assert the_signature.data == "Tammy"
 
-    def test_cant_multisign_card(self):
+    def test_cant_multi_sign_card(self):
         the_card = Card("A", "S")
         with pytest.raises(AttributeError):
             the_card.sign()
@@ -143,6 +136,55 @@ class TestCard:
         the_card.sign(text_signature="Tammy")
         with pytest.raises(AttributeError):
             the_card.sign(text_signature="Also Tammy")
+
+    def test_card_has_orientation(self):
+        the_card = Card("A", "H")
+        assert the_card.rotation == ROTATION_0
+        assert the_card.orientation == FACE_UP
+
+    def test_can_create_with_orientation(self):
+        the_card = Card("A", "H", orientation=FACE_DOWN, rotation=ROTATION_180)
+        assert the_card.rotation == ROTATION_180
+        assert the_card.orientation == FACE_DOWN
+
+    def test_can_set_orientation(self):
+        the_card = Card("A", "H")
+        the_card.orientation = FACE_DOWN
+        the_card.rotation = 42
+        assert the_card.orientation == FACE_DOWN
+        assert the_card.rotation == 42
+
+    def test_invalid_orientation_raises_exception(self):
+        the_card = Card("A", "H")
+        with pytest.raises(AttributeError):
+            the_card.rotation = -10
+        with pytest.raises(AttributeError):
+            the_card.rotation = 548
+
+    def test_can_flip_card(self):
+        the_card = Card("A", "H")
+        assert the_card.orientation == FACE_UP
+        the_card.turn_over()
+        assert the_card.orientation == FACE_DOWN
+        the_card.turn_over()
+        assert the_card.orientation == FACE_UP
+
+    def test_can_rotate_card(self):
+        the_card = Card("A", "H")
+        assert the_card.rotation == 0
+        the_card.rotate_by(180)
+        assert the_card.rotation == 180
+        the_card.rotate_by(-180)
+        assert the_card.rotation == 0
+        the_card.rotate_by(719)
+        assert the_card.rotation == 359
+
+    def test_can_iterate_deck(self, starter_deck):
+        deck_iterator = iter(starter_deck)
+        for _ in range(len(starter_deck)):
+            assert isinstance(next(deck_iterator), Card)
+        with pytest.raises(StopIteration):
+            _ = next(deck_iterator)
 
     def test_can_override_rank_order(self):
         pass

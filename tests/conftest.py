@@ -1,15 +1,8 @@
-#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
-#  #
-#  SPDX-License-Identifier: MIT
-#
-#
-#
-#
-#
-#
-# SPDX-License-Identifier: MIT
-
 """CircuitPython Card Deck Library"""
+
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+#  SPDX-License-Identifier: MIT
 
 import pytest  # pylint:disable=unused-import
 

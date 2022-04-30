@@ -258,25 +258,25 @@ min-similarity-lines=12
 [BASIC]
 
 # Naming hint for argument names
-argument-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+argument-name-hint=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct argument names
-argument-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+argument-rgx=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Naming hint for attribute names
-attr-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+attr-name-hint=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct attribute names
-attr-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+attr-rgx=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Bad variable names which should always be refused, separated by a comma
-bad-names=foo,bar,baz,toto,tutu,tata
+bad-names=foo,bar,baz,toto,tutu,tata,quux,garply
 
 # Naming hint for class attribute names
-class-attribute-name-hint=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
+class-attribute-name-hint=([A-Za-z_][A-Za-z0-9_]{2,45}|(__.*__))$
 
 # Regular expression matching correct class attribute names
-class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
+class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,45}|(__.*__))$
 
 # Naming hint for class names
 # class-name-hint=[A-Z_][a-zA-Z0-9]+$
@@ -297,10 +297,10 @@ const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
 docstring-min-length=-1
 
 # Naming hint for function names
-function-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+function-name-hint=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct function names
-function-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+function-rgx=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Good variable names which should always be accepted, separated by a comma
 # good-names=i,j,k,ex,Run,_
@@ -316,10 +316,10 @@ inlinevar-name-hint=[A-Za-z_][A-Za-z0-9_]*$
 inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
 
 # Naming hint for method names
-method-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+method-name-hint=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct method names
-method-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+method-rgx=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Naming hint for module names
 module-name-hint=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
@@ -340,10 +340,10 @@ no-docstring-rgx=^_
 property-classes=abc.abstractproperty
 
 # Naming hint for variable names
-variable-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+variable-name-hint=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct variable names
-variable-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
+variable-rgx=(([a-z][a-z0-9_]{2,45})|(_[a-z0-9_]*))$
 
 
 [IMPORTS]
@@ -398,11 +398,11 @@ valid-metaclass-classmethod-first-arg=mcs
 [DESIGN]
 
 # Maximum number of arguments for function / method
-max-args=5
+max-args=10
 
 # Maximum number of attributes for a class (see R0902).
 # max-attributes=7
-max-attributes=11
+max-attributes=25
 
 # Maximum number of boolean expressions in a if statement
 max-bool-expr=5
@@ -417,13 +417,13 @@ max-locals=15
 max-parents=7
 
 # Maximum number of public methods for a class (see R0904).
-max-public-methods=20
+max-public-methods=50
 
 # Maximum number of return / yield for function / method body
 max-returns=6
 
 # Maximum number of statements in function / method body
-max-statements=50
+max-statements=80
 
 # Minimum number of public methods for a class (see R0903).
 min-public-methods=1
