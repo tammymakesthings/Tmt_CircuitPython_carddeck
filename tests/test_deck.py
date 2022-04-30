@@ -1,21 +1,12 @@
-#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
-#  #
-#  SPDX-License-Identifier: MIT
-#
-#
-#
-#
-#
-
-# SPDX-FileCopyrightText: 2022 Tammy Cravit <tammy@tammymakesthings.com>
-#
-# SPDX-License-Identifier: MIT
-
 """
 CircuitPython  Card Deck Library
 """
-# Disable Pylint "method could be a function" errors
+
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
 #
+#  SPDX-License-Identifier: MIT
+
+# Disable Pylint "method could be a function" errors
 # pylint:disable=R0201, invalid-name
 
 import pytest  # noqa
@@ -69,6 +60,13 @@ class TestDeck:
         assert len(starter_deck) == 0
         picked_card = starter_deck.pick()
         assert isinstance(picked_card, Card)
+
+    def test_can_delete_card(self, starter_deck):
+        initial_length = len(starter_deck)
+        card_to_delete = starter_deck[0]
+        del starter_deck[0]
+        assert len(starter_deck) == initial_length - 1
+        assert card_to_delete not in starter_deck
 
     def test_raise_exception_no_reset(self, starter_deck) -> None:
         """

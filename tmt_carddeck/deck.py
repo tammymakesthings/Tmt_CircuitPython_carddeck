@@ -1,23 +1,17 @@
-#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
-#  #
-#  SPDX-License-Identifier: MIT
-#
-#
-#
-#
-#
-# SPDX-License-Identifier: MIT
-
 """
 tmt_carddeck: CircuitPython Card Deck library.
 """
+
+#  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+#  SPDX-License-Identifier: MIT
 
 from tmt_carddeck.card import Card  # noqa
 from tmt_carddeck.constants import DEFAULT_RANK_ORDER, DEFAULT_SUIT_ORDER
 
 
 try:
-    from typing import List, Optional  # noqa
+    from typing import List, Optional, Iterator  # noqa
 except ImportError:
     pass
 
@@ -38,10 +32,10 @@ class Deck:
         Args:
             initial_cards (Optional[list[Card]]): The initial list of cards.
         """
-        self._initial_cards: Optional[List[Card]] = (
-            list(initial_cards) if initial_cards else []
-        )
-        self._cards: Optional[List[Card]] = []
+        self._initial_cards: List[Card] = list(initial_cards) if initial_cards else []
+        self._cards: List[Card] = []
+        self._iter_index = 0
+
         self.reset_deck()
 
     def reset_deck(self) -> None:
@@ -100,6 +94,21 @@ class Deck:
 
     def __setitem__(self, key, value):
         self._cards[key] = value
+
+    def __delitem__(self, key) -> None:
+        del self._cards[key]
+
+    def __iter__(self) -> Iterator:
+        self._iter_index = 0
+        return self
+
+    def __next__(self) -> Card:
+        if self._iter_index >= len(self._cards):
+            raise StopIteration
+
+        selected_card = self._cards[self._iter_index]
+        self._iter_index += 1
+        return selected_card
 
 
 def standard_deck(
