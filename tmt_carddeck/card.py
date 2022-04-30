@@ -4,6 +4,8 @@
 #
 #
 #
+#
+#
 # SPDX-License-Identifier: MIT
 
 """
@@ -30,10 +32,10 @@ class Card:
     """
 
     def __init__(
-            self,
-            rank: Optional[Union[int, str, None]] = None,
-            suit: Optional[str] = None,
-            **kwargs
+        self,
+        rank: Optional[Union[int, str, None]] = None,
+        suit: Optional[str] = None,
+        **kwargs
     ) -> None:
         """
         Create a new Card.
@@ -130,8 +132,7 @@ class Card:
         return list(self._value_order)
 
     @value_order.setter
-    def value_order(self,
-                    new_order: Sequence) -> None:
+    def value_order(self, new_order: Sequence) -> None:
         """Overrides the card's value order."""
         self._value_order = list(new_order)
 
@@ -145,7 +146,7 @@ class Card:
         """Retrieves the numeric rank value of the card."""
         if self.is_joker:
             if (self.rank is None or self.rank == "*") and (
-                    self.suit is None or self.suit == "*"
+                self.suit is None or self.suit == "*"
             ):
                 return len(self._rank_order)
             return self._int_value_from_string(str(self.rank))
@@ -156,7 +157,7 @@ class Card:
         """Retrieves the numeric suit value of the card."""
         if self.is_joker:
             if (self.rank is None or self.rank == "*") and (
-                    self.suit is None or self.suit == "*"
+                self.suit is None or self.suit == "*"
             ):
                 return len(self._suit_order)
             return self._int_value_from_string(str(self.suit))
@@ -213,8 +214,7 @@ class Card:
         return hash_code
 
     # pylint: disable=no-self-use
-    def _int_value_from_string(self,
-                               str_value: str) -> int:
+    def _int_value_from_string(self, str_value: str) -> int:
         """Convert a string to an integer value."""
         int_val = 0
         for val_char in str_value:
@@ -222,9 +222,9 @@ class Card:
         return int_val
 
     def sign(
-            self,
-            text_signature: Optional[str] = None,
-            graphic_signature: Optional[str] = None,
+        self,
+        text_signature: Optional[str] = None,
+        graphic_signature: Optional[str] = None,
     ) -> None:
         """Allows a signature to be added to a card."""
         # Check that we have one kind of signature but not both

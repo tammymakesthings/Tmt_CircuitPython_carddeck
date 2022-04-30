@@ -4,6 +4,8 @@
 #
 #
 #
+#
+#
 # SPDX-License-Identifier: MIT
 
 """
@@ -37,7 +39,7 @@ class Deck:
             initial_cards (Optional[list[Card]]): The initial list of cards.
         """
         self._initial_cards: Optional[List[Card]] = (
-                list(initial_cards) if initial_cards else []
+            list(initial_cards) if initial_cards else []
         )
         self._cards: Optional[List[Card]] = []
         self.reset_deck()
@@ -101,8 +103,7 @@ class Deck:
 
 
 def standard_deck(
-        include_blank: Optional[bool] = True,
-        include_joker: Optional[bool] = True
+    include_blank: Optional[bool] = True, include_joker: Optional[bool] = True
 ) -> Deck:
     """Build and return a standard card deck."""
     the_deck: List[Card] = []
