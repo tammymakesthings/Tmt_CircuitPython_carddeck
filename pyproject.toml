@@ -2,6 +2,41 @@
 #
 # SPDX-License-Identifier: MIT
 
+[project]
+name = "tmt_carddeck"
+version = "0.1.0"
+description = "CircuitPython Card Deck library"
+authors = [
+    { name = "Tammy Cravit", email = "tammy@tammymakesthings.com" },
+]
+license = "MIT"
+readme = "README.rst"
+homepage = "https://github.com/tammymakesthings/Tmt_CircuitPython_carddeck"
+repository = "https://github.com/tammymakesthings/Tmt_CircuitPython_carddeck"
+keywords = [
+    "cards",
+    "card deck",
+    "circuitpython",
+    "displayio",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Other Environment",
+    "Framework :: CircuitPython",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: Embedded",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: MicroPython",
+    "Programming Language :: Python :: Implementation :: CircuitPython",
+    "Topic :: Games/Entertainment :: Card Games",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Other/Nonlisted Topic",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Hardware",
+]
+
 [tool.poetry]
 name = "tmt_carddeck"
 version = "0.1.0"
@@ -44,6 +79,7 @@ adafruit-circuitpython-bitmap-font = "^1.5.6"
 adafruit-circuitpython-imageload = "^1.15.4"
 adafruit-circuitpython-displayio-layout = "^1.17.0"
 mypy = "^0.942"
+recordclass = "^0.17.2"
 
 [tool.poetry.dev-dependencies]
 click = "^8.0.4"
@@ -57,15 +93,28 @@ pre-commit = "^2.17.0"
 ipython = "^8.2.0"
 isort = "^5.10.1"
 
-[tool.poetry.scripts]
-check = "scripts:check"
-
 [tool.black]
 target-version = ['py35']
+line-length = 100
+
+[tool.flake8]
+max-line-length = 100
 
 [tool.pytest.ini_options]
 minversion = 7.0
-addopts = "--color=auto --cov-fail-under=95 --cov --durations=0 --no-cov-on-fail"
+addopts = """\
+    --color=auto \
+    --cov-fail-under=95 \
+    --cov= \
+    --cov-report=xml:coverage.xml \
+    --cov-report=html:coverage_html \
+    --durations=0 \
+    --no-cov-on-fail \
+    --new-first \
+    --durations=5 \
+    --doctest-modules \
+    --doctest-continue-on-failure \
+    """
 testpaths = [
     "tests",
 ]
