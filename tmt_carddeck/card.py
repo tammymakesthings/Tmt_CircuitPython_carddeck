@@ -258,9 +258,7 @@ class Card:
         """
 
         if self.is_joker:
-            if (self.rank is None or self.rank == "*") and (
-                self.suit is None or self.suit == "*"
-            ):
+            if (self.rank is None or self.rank == "*") and (self.suit is None or self.suit == "*"):
                 return len(self._rank_order)
             return self._int_value_from_string(str(self.rank))
         return self._rank_order.index(self.rank)
@@ -272,9 +270,7 @@ class Card:
         """
 
         if self.is_joker:
-            if (self.rank is None or self.rank == "*") and (
-                self.suit is None or self.suit == "*"
-            ):
+            if (self.rank is None or self.rank == "*") and (self.suit is None or self.suit == "*"):
                 return len(self._suit_order)
             return self._int_value_from_string(str(self.suit))
         return self._suit_order.index(self.suit)

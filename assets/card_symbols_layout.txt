@@ -39,4 +39,3 @@ Row 1 (red)
     4 - Club
     5 - Heart
     6 - Spade
-
