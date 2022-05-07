@@ -9,7 +9,7 @@ PROJECT_NAME     ?= tmt_carddeck
 CIRCUP           ?= $(HOME)/.pyenv/shims/circup
 CPY_VOLUME_NAME  ?= CIRCUITPY
 CPY_DRIVE        ?= /Volumes/$(CPY_VOLUME_NAME)
-CODE_PY_FILENAME ?= $(PROJECT_NAME)_test.py
+CODE_PY_FILENAME ?= $(PROJECT_NAME)_simple_test.py
 SECRETS_PY_FILE  ?= $(HOME)/projects/circuitpython_secrets.py
 LIBRARIES_LIST   ?= adafruit_adt7410 adafruit_bitmap_font adafruit_bus_device \
 					adafruit_display_notification adafruit_display_shapes \
