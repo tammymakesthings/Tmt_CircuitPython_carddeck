@@ -1,10 +1,10 @@
-"""
-CircuitPython  Card Deck Library
-"""
-
 #  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
 #
 #  SPDX-License-Identifier: MIT
+
+"""
+CircuitPython  Card Deck Library
+"""
 
 # Disable Pylint "method could be a function" errors
 # pylint:disable=R0201, invalid-name

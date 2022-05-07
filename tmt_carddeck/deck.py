@@ -1,10 +1,10 @@
-"""
-tmt_carddeck: CircuitPython Card Deck library.
-"""
-
 #  SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
 #
 #  SPDX-License-Identifier: MIT
+
+"""
+tmt_carddeck: CircuitPython Card Deck library.
+"""
 
 from tmt_carddeck.card import Card  # noqa
 from tmt_carddeck.constants import DEFAULT_RANK_ORDER, DEFAULT_SUIT_ORDER
