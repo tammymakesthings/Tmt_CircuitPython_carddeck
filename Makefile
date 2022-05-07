@@ -1,4 +1,9 @@
 # Quick and dirty Makefile deployment
+#
+# SPDX-FileCopyrightText: Copyright (c) 2022 Tammy Cravit
+#
+# SPDX-License-Identifier: MIT
+
 
 CPY_VOLUME_NAME  ?= CIRCUITPY
 CPY_DRIVE        ?= /Volumes/$(CPY_VOLUME_NAME)
@@ -15,4 +20,3 @@ deploy:
 .PHONY: deploy
 
 .DEFAULT: deploy
-

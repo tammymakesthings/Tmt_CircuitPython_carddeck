@@ -11,7 +11,7 @@ repos:
     rev: v0.12.1
     hooks:
     - id: reuse
-      exclude: "^(poetry.lock$|tests/.coverage$)"
+      exclude: "^(poetry.lock$|tests/|assets/|.coverage$)"
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
