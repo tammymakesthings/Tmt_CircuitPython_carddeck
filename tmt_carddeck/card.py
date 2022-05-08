@@ -19,6 +19,9 @@ from tmt_carddeck.constants import (
     DEFAULT_SUIT_ORDER,
     ROTATION_0,
     FACE_UP,
+    FACE_DOWN,
+    COLOR_RED,
+    COLOR_BLACK
 )
 
 
@@ -31,12 +34,12 @@ class Card:
     """
 
     def __init__(
-        self,
-        rank: Union[int, str, None] = None,
-        suit: Optional[str] = None,
-        rotation: int = ROTATION_0,
-        orientation: bool = FACE_UP,
-        **kwargs
+            self,
+            rank: Union[int, str, None] = None,
+            suit: Optional[str] = None,
+            rotation: int = ROTATION_0,
+            orientation: int = FACE_UP,
+            **kwargs
     ) -> None:
         """
         Create a new Card.
@@ -68,7 +71,7 @@ class Card:
         self._suit_order = list(kwargs.get("suit_order", DEFAULT_SUIT_ORDER))
         self._is_joker: bool = kwargs.get("is_joker", False)
         self._rotation: int = rotation
-        self._orientation: bool = orientation
+        self._orientation: int = orientation
 
         self._build_value_order_list()
 
@@ -94,6 +97,13 @@ class Card:
             if suit is not None:
                 self._suit = str(suit).strip().upper()
 
+            self._color: int = kwargs.get("color", self._default_color())
+
+    def _default_color(self):
+        return COLOR_RED if \
+            self.suit and self.suit in ['H', 'D'] \
+            else COLOR_BLACK
+
     def _build_value_order_list(self) -> None:
         """
         Update the value order list from the rank order and suit order.
@@ -117,7 +127,16 @@ class Card:
             self._value_order.append("*")
 
     @property
-    def orientation(self) -> bool:
+    def color(self) -> int:
+        return self._color
+
+    @color.setter
+    def color(self,
+              value: int = COLOR_BLACK) -> None:
+        self._color = value
+
+    @property
+    def orientation(self) -> int:
         """
         Retrieves the card's orientation (face up or face down).
 
@@ -131,7 +150,8 @@ class Card:
         return self._orientation
 
     @orientation.setter
-    def orientation(self, orientation: bool) -> None:
+    def orientation(self,
+                    orientation: int) -> None:
         """
         Sets the card's orientation.
 
@@ -156,7 +176,8 @@ class Card:
         return self._rotation
 
     @rotation.setter
-    def rotation(self, value: int) -> None:
+    def rotation(self,
+                 value: int) -> None:
         """
         Set the card's rotation.
 
@@ -177,9 +198,12 @@ class Card:
         Turns the card over (face-up <-> face-down)
         """
 
-        self.orientation = not self.orientation
+        self.orientation = FACE_UP \
+            if self.orientation == FACE_DOWN \
+            else FACE_DOWN
 
-    def rotate_by(self, num_degrees) -> int:
+    def rotate_by(self,
+                  num_degrees) -> int:
         """
         Rotates the card on the plane it's resting on. A positive number
         of degrees rotates clockwise, a negative number rotates
@@ -236,7 +260,8 @@ class Card:
         return list(self._value_order)
 
     @value_order.setter
-    def value_order(self, new_order: Sequence) -> None:
+    def value_order(self,
+                    new_order: Sequence) -> None:
         """
         Overrides the card's value order.
         """
@@ -292,21 +317,24 @@ class Card:
 
         raise AttributeError("card value is unknown")
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self,
+               other) -> bool:
         """
         Compares two cards (==)
         """
 
         return self.suit == other.suit and self.rank == other.rank
 
-    def __gt__(self, other) -> bool:
+    def __gt__(self,
+               other) -> bool:
         """
         Compares two cards (>)
         """
 
         return int(self) > int(other)
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self,
+               other) -> bool:
         """
         Compares two cards (<)
         """
@@ -350,7 +378,8 @@ class Card:
         return hash_code
 
     # pylint: disable=no-self-use
-    def _int_value_from_string(self, str_value: str) -> int:
+    def _int_value_from_string(self,
+                               str_value: str) -> int:
         """
         Convert a string to an integer value.
         """
@@ -361,9 +390,9 @@ class Card:
         return int_val
 
     def sign(
-        self,
-        text_signature: Optional[str] = None,
-        graphic_signature: Optional[str] = None,
+            self,
+            text_signature: Optional[str] = None,
+            graphic_signature: Optional[str] = None,
     ) -> None:
         """
         Sign a card.

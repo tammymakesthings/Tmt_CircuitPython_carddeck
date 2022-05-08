@@ -9,7 +9,7 @@ CircuitPython Card Deck Library
 import pytest  # pylint:disable=unused-import
 
 from tmt_carddeck.card import Card
-from tmt_carddeck.constants import FACE_DOWN, FACE_UP, ROTATION_0, ROTATION_180
+from tmt_carddeck.constants import COLOR_BLACK, COLOR_RED, FACE_DOWN, FACE_UP, ROTATION_0, ROTATION_180
 
 
 # pylint:disable=no-self-use,missing-function-docstring
@@ -180,7 +180,18 @@ class TestCard:
         the_card.rotate_by(719)
         assert the_card.rotation == 359
 
-    def test_can_iterate_deck(self, starter_deck):
+    def test_card_knows_color(self):
+        assert Card('A', 'H').color == COLOR_RED
+        assert Card('A', 'D').color == COLOR_RED
+        assert Card('A', 'S').color == COLOR_BLACK
+        assert Card('A', 'C').color == COLOR_BLACK
+
+    def test_can_override_color(self):
+        assert Card('A', 'H', color=COLOR_BLACK).color == COLOR_BLACK
+        assert Card('A', 'S', color=COLOR_RED).color == COLOR_RED
+
+    def test_can_iterate_deck(self,
+                              starter_deck):
         deck_iterator = iter(starter_deck)
         for _ in range(len(starter_deck)):
             assert isinstance(next(deck_iterator), Card)

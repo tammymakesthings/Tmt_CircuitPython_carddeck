@@ -81,6 +81,10 @@ adafruit-circuitpython-displayio-layout = "^1.17.0"
 mypy = "^0.942"
 recordclass = "^0.17.2"
 
+[tool.poetry.group.dev.dependencies]
+adafruit-circuitpython-displayio-layout = "^1.18.0"
+adafruit-circuitpython-display-shapes = "^2.4.3"
+
 [tool.poetry.dev-dependencies]
 click = "^8.0.4"
 pytest = "^7.1.1"
